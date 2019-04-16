@@ -14,13 +14,18 @@ class LinkController extends Controller
      */
     public function index()
     {
-        $data = [
-            'name'=>'patryk',
-            'surname'=>'sosnowski'
+        $articles = [
+            'Article 1',
+            'Article 2'
         ];
 
-        
+        $data = [
+            'name'=>'patryk',
+            'surname'=>'sosnowski',
+            $articles
+        ];
+  
      //   return new Response('<html>HHHH</html>');
-        return $this->render("articles/index.html.twig");
+        return $this->render("articles/index.html.twig", array('articles'=> $articles));
     }
 }
