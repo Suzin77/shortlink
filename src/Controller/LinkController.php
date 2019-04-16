@@ -14,6 +14,12 @@ class LinkController extends Controller
      */
     public function index()
     {
+        $data = [
+            'name'=>'patryk',
+            'surname'=>'sosnowski'
+        ];
+
+        
      //   return new Response('<html>HHHH</html>');
         return $this->render("articles/index.html.twig");
     }

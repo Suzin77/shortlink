@@ -2,5 +2,10 @@
 {% block title %} Short link {% endblock %}
 
 {% block body %}
-<h1>Articles</h1>
+    <h1>Articles</h1>
+    {% if data is defined %}
+        <p>{{ name }} {{surname}}</p>
+    {% else %}
+        <p>there is no articles</p>
+    {% endif %}
 {% endblock %}
