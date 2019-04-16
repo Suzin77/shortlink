@@ -3,13 +3,13 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Boundel\FrameworkExtraBoundle\Configuration\Method;
+use Sensio\Bundel\FrameworkExtraBundle\Configuration\Method;
 
 class LinkController
 {
     /**
      * @Route("/")
-     * @Method({"GET"})
+     * 
      */
     public function index()
     {
