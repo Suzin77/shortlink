@@ -19,13 +19,17 @@ class LinkController extends Controller
             'Article 2'
         ];
 
-        $data = [
+        $person = [
             'name'=>'patryk',
             'surname'=>'sosnowski',
-            $articles
+        ];
+
+        $data = [
+            'person'=>$person,
+            'articles'=>$articles
         ];
   
      //   return new Response('<html>HHHH</html>');
-        return $this->render("articles/index.html.twig", array('articles'=> $articles));
+        return $this->render("articles/index.html.twig", array('articles'=> $articles, 'data'=>$data));
     }
 }
