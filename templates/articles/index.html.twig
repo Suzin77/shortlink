@@ -4,7 +4,7 @@
 {% block body %}
     <h1>Articles</h1>
     {% if articles is defined %}
-        <table class="table table-striped">
+        <table id = "articles" class="table table-striped">
             <thead>
                 <tr>
                     <th>Articels Title</th>
@@ -16,10 +16,13 @@
                     <tr>
                         <td>{{article.title}}</td>
                         <td>
-                            <a href="article/{{article.id}}" class="btn btn-dark">Show</a>
+                            <a href="article/show/{{article.id}}" class="btn btn-dark">Show</a>
                         </td>
                         <td>
-                            <a href="article/{{article.id}}" class="btn btn-danger">Del</a>
+                            <a href="article/edit/{{article.id}}" class="btn btn-light">Edit</a>
+                        </td>
+                        <td>
+                            <a href="article/delete/{{article.id}}" class="btn btn-danger delete-article" data-id = {{article.id}}>Del</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -29,4 +32,8 @@
     {% else %}
         <p>there is no articles</p>
     {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+ <script src="js/main.js"></script>
 {% endblock %}
