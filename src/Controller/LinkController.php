@@ -45,7 +45,7 @@ class LinkController extends Controller
      */
 
     public function new(Request $request)
-    {
+    {   
         $article = new Article();
 
         $form = $this->createFormBuilder($article)
