@@ -7,6 +7,6 @@
         {{ form_end(data.form) }}
     {% endif %}
     {% if data.shortLink is defined %}
-        <p>Shoort URL is: {{data.shortLink}}</p>
+        <p>Shoort URL is: {{ data.serverName }}{{data.serverBase}}/main/{{data.shortLink}}</p>
     {% endif %}
 {% endblock %}    

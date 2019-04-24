@@ -21,9 +21,12 @@ class ShortLinkController extends Controller
 
     public function server_dump()
     {
-       // var_dump($_SERVER);
+       var_dump($_SERVER);
        
         var_dump($_REQUEST);
+
+        $serverName = $_SERVER['SERVER_NAME'];
+        $serverBase = $_SERVER['BASE'];
         $shortLink =  ShortLinkGenerator::generateShortURL();
         
         $shorterConfig = new ShorterConfig();
@@ -45,16 +48,16 @@ class ShortLinkController extends Controller
     }
 
     /**
-     * @Route("/main/{shortURL}" , name = "main")
+     * @Route("/main/{shorturl}" , name = "main")
      */
-    public function main()
-    {
-        $shortURL = '';
-        if($shortURL){
-            //make redirection 
-        } else {
-            //reditrect to index
+    public function main($shorturl)
+    {   
+        $link = $this->getDoctrine()->getRepository(Link::class)->findOneBy(['shorturl' => $shorturl]);
+        if($link){
+            //make redirection
+            return $this->redirect('http://'.$link->getLongurl());     
         }
+        return $this->redirectToRoute('new_link');
     }
 
     public function createRedirection($longURL)
@@ -70,10 +73,10 @@ class ShortLinkController extends Controller
         }
     }
 
-    public function getUrlParameter($parName)
+    public function checkShortLink($shortLinkSuffix)
     {
-        //pobieramy parametry
-        //return $parname
+        $check = $this->getDoctrine()->getRepository(Link::class)->find($shortLinkSuffix);
+        return $check;
     }
 
     public function getLongURL($parname)
@@ -93,6 +96,8 @@ class ShortLinkController extends Controller
      */
     public function new(Request $request)
     {   
+        $serverName = $_SERVER['SERVER_NAME'];
+        $serverBase = $_SERVER['BASE'];
         $link = new Link();
         $shortLink ='aa';
         $form = $this->createFormBuilder($link)
@@ -112,7 +117,7 @@ class ShortLinkController extends Controller
             $link->setShorturl($shortLink);
             $entityManager->persist($link);
             $entityManager->flush();
-            $data = ['form'=>$form->createView(), 'shortLink'=>$shortLink];
+            $data = ['form'=>$form->createView(), 'shortLink'=>$shortLink, 'serverName'=>$serverName, 'serverBase'=>$serverBase];
             return $this->render('shorter/form.html.twig', ['data'=>$data]);
         }
         return $this->render('shorter/form.html.twig', ['data'=>['form'=>$form->createView(), 'shortlink'=>$shortLink]]);
