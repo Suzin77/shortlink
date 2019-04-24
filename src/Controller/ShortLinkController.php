@@ -25,16 +25,13 @@ class ShortLinkController extends Controller
        
         var_dump($_REQUEST);
         $shortLink =  ShortLinkGenerator::generateShortURL();
-        //$shortLinkGenerator = new ShortLinkGenerator();
         
-
         $shorterConfig = new ShorterConfig();
         $shorterConfig->getConfig();
         $domain = $shorterConfig->config_domain;
         
         $requestURI = $this->getServerURI($_SERVER);
         $longURL = $this->getLongURL('longurl');
-        //$shortURL = $this->generateShortURL();
         $shortURL =  ShortLinkGenerator::generateShortURL();
 
         $fullURL = $domain."/".$shortURL;
@@ -42,8 +39,7 @@ class ShortLinkController extends Controller
         return $this->render('deb/index.html.twig', array('request_uri'=>$requestURI,
                                                           'longurl'=>$longURL,
                                                           'shortURL'=>$shortURL,
-                                                          'fullURL' =>$fullURL
-                                                          
+                                                          'fullURL' =>$fullURL                                                          
                                                     )
                             );
     }
@@ -91,22 +87,6 @@ class ShortLinkController extends Controller
         //return $logURL;
     }
 
-    public function generateShortURL()
-    {   
-        $shortURL = '';
-        $range = range('a','z');
-        //$randomCharacter = rand(0,count($range)-1);
-        
-        while(strlen($shortURL)<=5){
-            $randomCharacter = rand(0,count($range)-1);
-            $shortURL .= $range[$randomCharacter]; 
-        }
-        //ta funkcja generuje krotki link.
-        //this function generates short sufix added to link.
-        //return shortURL;
-        return $shortURL;
-    }
-
     /**
      * @Route("/link/new", name="new_link");
      * Method({"GET", "POST"})
@@ -117,29 +97,19 @@ class ShortLinkController extends Controller
         $shortLink ='aa';
         $form = $this->createFormBuilder($link)
                      ->add('longurl', TextType::class, array('attr'=>array('class'=> 'form-control')))
-                    //  ->add('body', TextareaType::class, array(
-                    //        'required'=> false,
-                    //        'attr'=>[
-                    //            'class'=>'form-control'
-                    //        ]
-                    //    ))
                      ->add('Save', SubmitType::class, array(
                          'label'=> 'Create',
-                         'attr' => [
-                             'class' => 'btn btn-primary mt-3'
-                         ]
+                         'attr' => ['class' => 'btn btn-primary mt-3']
                      ))
                      ->getForm();
 
         $form->handleRequest($request);
         
         if($form->isSubmitted() && $form->isValid()){
-            //$form = $this->createFormBuilder($link)
             $link = $form->getData();
             $entityManager = $this->getDoctrine()->getManager();
             $shortLink =  ShortLinkGenerator::generateShortURL();
             $link->setShorturl($shortLink);
-
             $entityManager->persist($link);
             $entityManager->flush();
             $data = ['form'=>$form->createView(), 'shortLink'=>$shortLink];
