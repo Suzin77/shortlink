@@ -21,9 +21,8 @@ class ShortLinkController extends Controller
 
     public function server_dump()
     {
-       var_dump($_SERVER);
-       
-        var_dump($_REQUEST);
+        //var_dump($_SERVER);
+        //var_dump($_REQUEST);
 
         $serverName = $_SERVER['SERVER_NAME'];
         $serverBase = $_SERVER['BASE'];
@@ -55,7 +54,7 @@ class ShortLinkController extends Controller
         $link = $this->getDoctrine()->getRepository(Link::class)->findOneBy(['shorturl' => $shorturl]);
         if($link){
             //make redirection
-            return $this->redirect('http://'.$link->getLongurl());     
+            return $this->redirect('https://'.$link->getLongurl());     
         }
         return $this->redirectToRoute('new_link');
     }
@@ -79,16 +78,16 @@ class ShortLinkController extends Controller
         return $check;
     }
 
-    public function getLongURL($parname)
-    {
-        if(isset($_REQUEST[$parname])){
-            //need check data 
-            $parValue = $_REQUEST[$parname];
-            //after clear data
-            return $parValue;
-        }
-        //return $logURL;
-    }
+    // public function getLongURL($parname)
+    // {
+    //     if(isset($_REQUEST[$parname])){
+    //         //need check data 
+    //         $parValue = $_REQUEST[$parname];
+    //         //after clear data
+    //         return $parValue;
+    //     }
+    //     //return $logURL;
+    // }
 
     /**
      * @Route("/link/new", name="new_link");
