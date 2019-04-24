@@ -95,10 +95,12 @@ class ShortLinkController extends Controller
      */
     public function new(Request $request)
     {   
-        $serverName = $_SERVER['SERVER_NAME'];
-        $serverBase = $_SERVER['BASE'];
+        $shortLink= '';
+        $config = new ShorterConfig();
+        $config->getConfig();
+        $serverName = $config->serverName;
+        $serverBase = $config->serverBase;
         $link = new Link();
-        $shortLink ='aa';
         $form = $this->createFormBuilder($link)
                      ->add('longurl', TextType::class, array('attr'=>array('class'=> 'form-control')))
                      ->add('Save', SubmitType::class, array(

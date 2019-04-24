@@ -15,7 +15,9 @@ class ShorterConfig extends Controller
         $config = [];
         $config['domain'] = 'pli.pl';
         $this->config_domain = $config['domain'];
+        $this->serverName = $_SERVER['SERVER_NAME'];
+        $this->serverBase = $_SERVER['BASE'];
 
-        return $config;
+        return $this;
     }
 }
