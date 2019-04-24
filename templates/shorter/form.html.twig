@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if data is defined %}
+        {{ form_start(data.form) }}
+        {{ form_widget(data.form) }}
+        {{ form_end(data.form) }}
+    {% endif %}
+    {% if data.shortLink is defined %}
+        <p>Shoort URL is: {{data.shortLink}}</p>
+    {% endif %}
+{% endblock %}    
