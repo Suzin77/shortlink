@@ -17,7 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 class LinkController extends Controller
 {
     /**
-     * @Route("", name ="article_list")
+     * @Route("article/list", name ="article_list")
      * 
      */
     public function index()

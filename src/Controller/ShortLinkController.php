@@ -47,7 +47,7 @@ class ShortLinkController extends Controller
     }
 
     /**
-     * @Route("/main/{shorturl}" , name = "main")
+     * @Route("/new/{shorturl}" , name = "main")
      */
     public function main($shorturl)
     {   

@@ -13,5 +13,5 @@
     # Rewrite all other queries to the front controller.
     RewriteRule .? %{ENV:BASE}/index.php [L]
 
-    Redirect 301 http://localhost/symfony/shortlink/public/deb/test01 http://www.wp.pl
+    #Redirect 301 http://localhost/symfony/shortlink/public/deb/test01 http://www.wp.pl
 </IfModule>
