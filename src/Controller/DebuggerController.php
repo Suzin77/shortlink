@@ -62,20 +62,4 @@ class DebuggerController extends Controller
         }
         //return $logURL;
     }
-
-    // public function generateShortURL()
-    // {   
-    //     $shortURL = '';
-    //     $range = range('a','z');
-    //     //$randomCharacter = rand(0,count($range)-1);
-    //     $count = 0;
-
-    //     while(strlen($shortURL)<=5){
-    //         $randomCharacter = rand(0,count($range)-1);
-    //         $shortURL .= $range[$randomCharacter]; 
-    //     }
-    //     //ta funkcja generuje krotki link.
-    //     //return shortURL;
-    //     return $shortURL;
-    // }
 }

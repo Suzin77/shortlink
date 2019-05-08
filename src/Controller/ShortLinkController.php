@@ -21,12 +21,12 @@ class ShortLinkController extends Controller
 
     public function server_dump()
     {
-        //var_dump($_SERVER);
+        var_dump($_SERVER);
         //var_dump($_REQUEST);
 
         $serverName = $_SERVER['SERVER_NAME'];
         $serverBase = $_SERVER['BASE'];
-        $shortLink =  ShortLinkGenerator::generateShortURL();
+        $shortLink =  ShortLinkGenerator::generateSufix(5);
         
         $shorterConfig = new ShorterConfig();
         $shorterConfig->getConfig();
@@ -34,7 +34,7 @@ class ShortLinkController extends Controller
         
         $requestURI = $this->getServerURI($_SERVER);
         $longURL = $this->getLongURL('longurl');
-        $shortURL =  ShortLinkGenerator::generateShortURL();
+        $shortURL =  ShortLinkGenerator::generateSufix(5);
 
         $fullURL = $domain."/".$shortURL;
 
@@ -78,21 +78,6 @@ class ShortLinkController extends Controller
         return $check;
     }
 
-    // public function getLongURL($parname)
-    // {
-    //     if(isset($_REQUEST[$parname])){
-    //         //need check data 
-    //         $parValue = $_REQUEST[$parname];
-    //         //after clear data
-    //         return $parValue;
-    //     }
-    //     //return $logURL;
-    // }
-
-    /**
-     * @Route("/link/new", name="new_link");
-     * Method({"GET", "POST"})
-     */
     public function new(Request $request)
     {   
         $shortLink= '';
@@ -122,5 +107,16 @@ class ShortLinkController extends Controller
             return $this->render('shorter/form.html.twig', ['data'=>$data]);
         }
         return $this->render('shorter/form.html.twig', ['data'=>['form'=>$form->createView(), 'shortlink'=>$shortLink]]);
+    }
+
+    public function getLongURL($parname)
+    {
+    if(isset($_REQUEST[$parname])){
+            //need check data 
+            $parValue = $_REQUEST[$parname];
+            //after clear data
+            return $parValue;
+        }
+        //return $logURL;
     }
 }

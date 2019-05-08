@@ -10,13 +10,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class ShortLinkGenerator
 {
-    static public function generateShortURL()
+    static public function generateSufix($length)
     {   
         $shortURL = '';
         $range = range('a','z');
         $count = 0;
 
-        while(strlen($shortURL)<=5){
+        while(strlen($shortURL)<=$length){
             $randomCharacter = rand(0,count($range)-1);
             $shortURL .= $range[$randomCharacter]; 
         }
