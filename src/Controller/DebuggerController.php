@@ -26,7 +26,7 @@ class DebuggerController extends Controller
         
         $requestURI = $this->getServerURI($_SERVER);
         $longURL = $this->getLongURL('longurl');
-        $shortURL = $this->generateShortURL();
+        $shortURL = ShortLinkGenerator::generateSufix(5);
 
         $fullURL = $domain."/".$shortURL;
 
