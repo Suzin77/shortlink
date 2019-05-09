@@ -22,9 +22,20 @@ class Link
     private $longurl;
 
     /**
-     * @ORM\Column(type="string", length=15)
+     * @ORM\Column(type="string", length=100)
      */
     private $shorturl;
+
+    /**
+     * @ORM\Column(type="string", length=10, nullable=true)
+     */
+    private $Protocol;
+
+    /**
+     * @ORM\Column(type="string", length=15, nullable=true)
+     */
+    private $sufix;
+
 
     public function getId(): ?int
     {
@@ -54,4 +65,29 @@ class Link
 
         return $this;
     }
+
+    public function getProtocol(): ?string
+    {
+        return $this->Protocol;
+    }
+
+    public function setProtocol(?string $Protocol): self
+    {
+        $this->Protocol = $Protocol;
+
+        return $this;
+    }
+
+    public function getSufix(): ?string
+    {
+        return $this->sufix;
+    }
+
+    public function setSufix(?string $sufix): self
+    {
+        $this->sufix = $sufix;
+
+        return $this;
+    }
+
 }

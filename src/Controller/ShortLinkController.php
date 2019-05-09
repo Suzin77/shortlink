@@ -16,60 +16,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class ShortLinkController extends Controller
 {
     /**
-     * @Route("/short/{id}", name="shortlink")
-     */
-
-    public function server_dump()
-    {
-        //var_dump($_SERVER);
-        //var_dump($_REQUEST);
-
-        $serverName = $_SERVER['SERVER_NAME'];
-        $serverBase = $_SERVER['BASE'];
-        $shortLink =  ShortLinkGenerator::generateShortURL();
-        
-        $shorterConfig = new ShorterConfig();
-        $shorterConfig->getConfig();
-        $domain = $shorterConfig->config_domain;
-        
-        $requestURI = $this->getServerURI($_SERVER);
-        $longURL = $this->getLongURL('longurl');
-        $shortURL =  ShortLinkGenerator::generateShortURL();
-
-        $fullURL = $domain."/".$shortURL;
-
-        return $this->render('deb/index.html.twig', array('request_uri'=>$requestURI,
-                                                          'longurl'=>$longURL,
-                                                          'shortURL'=>$shortURL,
-                                                          'fullURL' =>$fullURL                                                          
-                                                    )
-                            );
-    }
-
-    /**
-     * @Route("/new/{shorturl}" , name = "main")
+     * @Route("/{shorturl}" , name = "main")
      */
     public function main($shorturl)
     {   
-        $link = $this->getDoctrine()->getRepository(Link::class)->findOneBy(['shorturl' => $shorturl]);
+        $link = $this->getDoctrine()->getRepository(Link::class)->findOneBy(['sufix' => $shorturl]);
         if($link){
             //make redirection
-            return $this->redirect('https://'.$link->getLongurl());     
+            return $this->redirect($link->getLongurl());    
         }
         return $this->redirectToRoute('new_link');
-    }
-
-    public function createRedirection($longURL)
-    {
-
-        return $shortURL;
-    }
-
-    public function getServerURI($data)
-    {
-        if(isset($data['REQUEST_URI'])){
-            return $data['REQUEST_URI'];
-        }
     }
 
     public function checkShortLink($shortLinkSuffix)
@@ -78,20 +34,16 @@ class ShortLinkController extends Controller
         return $check;
     }
 
-    // public function getLongURL($parname)
-    // {
-    //     if(isset($_REQUEST[$parname])){
-    //         //need check data 
-    //         $parValue = $_REQUEST[$parname];
-    //         //after clear data
-    //         return $parValue;
-    //     }
-    //     //return $logURL;
-    // }
+    public function addProtocol(Link $link)
+    {   
+        $longURL = $link->getLongurl();
+        if (substr($longURL, 0, 5) !== 'https' || substr($longURL, 0, 4) !== 'http'){       
+            return $link->setLongurl('https://'.$longURL);
+        }    
+    }
 
     /**
-     * @Route("/link/new", name="new_link");
-     * Method({"GET", "POST"})
+     * @Route("", name= "new_link")
      */
     public function new(Request $request)
     {   
@@ -114,11 +66,17 @@ class ShortLinkController extends Controller
         if($form->isSubmitted() && $form->isValid()){
             $link = $form->getData();
             $entityManager = $this->getDoctrine()->getManager();
-            $shortLink =  ShortLinkGenerator::generateShortURL();
+            $shortLinkSufix =  ShortLinkGenerator::generateSufix(5);
+            $link->setSufix($shortLinkSufix);
+            $this->addProtocol($link);
+            //build up whole short adress with protocol.
+            $shortLink = "http://".$serverName.$serverBase."/".$shortLinkSufix;
             $link->setShorturl($shortLink);
             $entityManager->persist($link);
             $entityManager->flush();
-            $data = ['form'=>$form->createView(), 'shortLink'=>$shortLink, 'serverName'=>$serverName, 'serverBase'=>$serverBase];
+            $data = ['form'=>$form->createView(),
+                     'shortLink'=>$shortLink
+                    ];
             return $this->render('shorter/form.html.twig', ['data'=>$data]);
         }
         return $this->render('shorter/form.html.twig', ['data'=>['form'=>$form->createView(), 'shortlink'=>$shortLink]]);
