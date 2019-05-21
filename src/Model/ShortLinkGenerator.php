@@ -1,5 +1,5 @@
 <?php 
-namespace App\Controller;
+namespace App\Model;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,7 +15,6 @@ class ShortLinkGenerator
         $shortURL = '';
         $range = range('a','z');
         $count = 0;
-
         while(strlen($shortURL)<=$length){
             $randomCharacter = rand(0,count($range)-1);
             $shortURL .= $range[$randomCharacter]; 

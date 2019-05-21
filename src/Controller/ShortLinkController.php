@@ -2,10 +2,11 @@
 namespace App\Controller;
 
 use App\Entity\Link;
+use App\Model\ShortLinkGenerator;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -28,20 +29,6 @@ class ShortLinkController extends Controller
         return $this->redirectToRoute('new_link');
     }
 
-    public function checkShortLink($shortLinkSuffix)
-    {
-        $check = $this->getDoctrine()->getRepository(Link::class)->find($shortLinkSuffix);
-        return $check;
-    }
-
-    public function addProtocol(Link $link)
-    {   
-        $longURL = $link->getLongurl();
-        if (substr($longURL, 0, 5) !== 'https' || substr($longURL, 0, 4) !== 'http'){       
-            return $link->setLongurl('https://'.$longURL);
-        }    
-    }
-
     /**
      * @Route("", name= "new_link")
      */
@@ -54,9 +41,9 @@ class ShortLinkController extends Controller
         $serverBase = $config->serverBase;
         $link = new Link();
         $form = $this->createFormBuilder($link)
-                     ->add('longurl', TextType::class, array('attr'=>array('class'=> 'form-control')))
+                     ->add('longurl', TextType::class, array('label'=>'Long URL', 'attr'=>array('class'=> 'form-control')))
                      ->add('Save', SubmitType::class, array(
-                         'label'=> 'Create',
+                         'label'=> 'Short Your Link',
                          'attr' => ['class' => 'btn btn-primary mt-3']
                      ))
                      ->getForm();
@@ -68,9 +55,9 @@ class ShortLinkController extends Controller
             $entityManager = $this->getDoctrine()->getManager();
             $shortLinkSufix =  ShortLinkGenerator::generateSufix(5);
             $link->setSufix($shortLinkSufix);
-            $this->addProtocol($link);
+            $link->addProtocol();
             //build up whole short adress with protocol.
-            $shortLink = "http://".$serverName.$serverBase."/".$shortLinkSufix;
+            $shortLink = "http://".$serverName.$serverBase."/".$shortLinkSufix;//put this into separet function.
             $link->setShorturl($shortLink);
             $entityManager->persist($link);
             $entityManager->flush();

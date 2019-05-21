@@ -7,6 +7,9 @@
         {{ form_end(data.form) }}
     {% endif %}
     {% if data.shortLink is defined %}
+        </br>
         <p>Shoort URL is: {{data.shortLink}}</p>
+
+        <p>Direct link: <a target="_blank" href="{{data.shortLink}}">{{data.shortLink}}</a></p>
     {% endif %}
 {% endblock %}    

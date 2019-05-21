@@ -90,4 +90,14 @@ class Link
         return $this;
     }
 
+    public function addProtocol(): self
+    {   
+        $longURL = $this->getLongurl();
+        if (substr($longURL, 0, 5) !== 'https' || substr($longURL, 0, 4) !== 'http'){       
+             $this->setLongurl('https://'.$longURL);
+             return $this;
+        }
+        return $this;    
+    }
+
 }
