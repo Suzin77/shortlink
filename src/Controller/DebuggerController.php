@@ -18,7 +18,7 @@ class DebuggerController extends Controller
     {
        // var_dump($_SERVER);
        
-        var_dump($_REQUEST);
+        //var_dump($_REQUEST);
         
         $shorterConfig = new ShorterConfig();
         $shorterConfig->getConfig();

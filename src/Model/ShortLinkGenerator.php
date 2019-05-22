@@ -1,6 +1,8 @@
 <?php 
 namespace App\Model;
 
+use App\Controller\Shorterconfig;
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +22,17 @@ class ShortLinkGenerator
             $shortURL .= $range[$randomCharacter]; 
         }
         return $shortURL;
+    }
+
+    static public function generateShortLink($sufix)
+    {
+        $config = new ShorterConfig();
+        $config->getConfig();
+        $serverName = $config->serverName;
+        $serverBase = $config->serverBase;
+
+        $shortLink = "https://".$serverName.$serverBase."/".$sufix;
+        return $shortLink;
     }
 
     
