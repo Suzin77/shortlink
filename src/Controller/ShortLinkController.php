@@ -39,7 +39,9 @@ class ShortLinkController extends Controller
         $config->getConfig();
         $serverName = $config->serverName;
         $serverBase = $config->serverBase;
+
         $link = new Link();
+
         $form = $this->createFormBuilder($link)
                      ->add('longurl', TextType::class, array('label'=>'Long URL', 'attr'=>array('class'=> 'form-control')))
                      ->add('Save', SubmitType::class, array(
@@ -52,20 +54,30 @@ class ShortLinkController extends Controller
         
         if($form->isSubmitted() && $form->isValid()){
             $link = $form->getData();
+            $link = $this->checkLongLink($link);
+
             $entityManager = $this->getDoctrine()->getManager();
-            $shortLinkSufix =  ShortLinkGenerator::generateSufix(5);
-            $link->setSufix($shortLinkSufix);
-            $link->addProtocol();
-            //build up whole short adress with protocol.
-            $shortLink = "http://".$serverName.$serverBase."/".$shortLinkSufix;//put this into separet function.
-            $link->setShorturl($shortLink);
             $entityManager->persist($link);
             $entityManager->flush();
             $data = ['form'=>$form->createView(),
-                     'shortLink'=>$shortLink
+                     'shortLink'=>$link->getShorturl()
                     ];
             return $this->render('shorter/form.html.twig', ['data'=>$data]);
         }
         return $this->render('shorter/form.html.twig', ['data'=>['form'=>$form->createView(), 'shortlink'=>$shortLink]]);
+    }
+
+    public function checkLongLink(Link $link)
+    {
+      $link->addProtocol();
+      $longlink = $this->getDoctrine()->getRepository(Link::class)->findOneBy(['longurl'=>$link->getLongurl()]);
+      if($longlink){
+          return $longlink;
+      }
+      $shortLinkSufix =  ShortLinkGenerator::generateSufix(5);
+      $shortLink = ShortLinkGenerator::generateShortLink($shortLinkSufix);
+      $link->setSufix($shortLinkSufix);
+      $link->setShorturl($shortLink);
+      return $link;
     }
 }
